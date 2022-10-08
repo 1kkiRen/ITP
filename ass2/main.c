@@ -265,10 +265,11 @@ int main(){
                 if(player[find_id(player, name1, m)].visibility == true){
                     if(player[find_id(player, name1, m)].frozen == false){
                         if(player[find_id(player, name1, m)].team_number == player[find_id(player, name2, m)].team_number){
-                            if(strcmp(name1, name2) != 0)
+                            if(strcmp(name1, name2) != 0){
                                 heal(&player[find_id(player, name1, m)], &player[find_id(player, name2, m)]);
                                 if (player[find_id(player, name2, m)].power > 0)
                                     player[find_id(player, name2, m)].frozen = false;
+                                }
                             else
                                 fprintf(output, "The player cannot heal itself\n");
                         }
@@ -358,10 +359,10 @@ int main(){
                 player[i].power = 1000;
 
         }
-        for (int i = 0; i < m; i++){
-            printf("%s %d %d %d %d\n", player[i].name, player[i].team_number, player[i].power, player[i].visibility, player[i].frozen);
-        }
-        printf("\n");
+        // for (int i = 0; i < m; i++){
+        //     printf("%s %d %d %d %d\n", player[i].name, player[i].team_number, player[i].power, player[i].visibility, player[i].frozen);
+        // }
+        // printf("\n");
     }
 
     // ========================================= Winner =========================================
