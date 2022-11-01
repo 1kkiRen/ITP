@@ -38,7 +38,6 @@ int names_check(char name[21], FILE * output);
 int find_id(Player *players, char name[21], int m);
 
 
-
 int main(){
     FILE * input = fopen("input.txt", "r");                 // open input file
     FILE * output = fopen("output.txt", "w");               // open output file
@@ -318,12 +317,8 @@ void attack(Player *player1, Player *player2){
 }
 
 void super(Player *player1, Player *player2, Player *player, int supers_count, int m){
-    char temp[21] = {'S', '_'};                                                 // temp is the name of the super player
-
-    char strn[19];
-    sprintf(strn, "%d", supers_count);                                          // converts supers_count to string
-
-    strcat(temp, strn);                                                         // temp = S_supers_count
+    char temp[21];
+    sprintf(temp, "S_%d", supers_count);                                        // converts supers_count to string
 
     strcpy(player[m].name, temp);                                               // player[m].name = S_supers_count
 

@@ -3,15 +3,20 @@
 #include <string.h>
 
 int main(){
-    char temp[21] = {'S', '_', };
+    int n =  -1;
 
-    int k = 41;
+    int k = 2;
 
-    char strn[19];
+    printf("%d\n", n);
 
-    sprintf(strn, "%d", k);
+    if(k <= n <= 100){
+        printf("n is between 2 and 100\n");
+    }
+    else{
+        printf("n is not between 2 and 100\n");
+    }
 
-    strcat(temp, strn);
+    // (k <= n <= 100) ? printf("n is between 2 and 100") : printf("n is not between 2 and 100");
 
-    printf("%s", temp);
+    return 0;
 }
