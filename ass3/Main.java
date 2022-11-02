@@ -3,6 +3,132 @@ package ass3;
 import java.util.Scanner;
 
 
+public class Main {
+    static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
+        
+        CalculatorType calc_type = readCalculator();
+        
+        Calculator calculator = null;
+        
+        switch(calc_type){
+            case INTEGER:
+                calculator = new IntegerCalculator();
+                break;
+                
+            case DOUBLE:
+                calculator = new DoubleCalculator();
+                break;
+
+            case STRING:
+                calculator = new StringCalculator();
+                break;
+                
+            case INCORRECT:
+                reportFatalError("Wrong calculator type");
+                return;
+        }
+            
+            
+            
+        int n = readCommandsNumber();
+
+        if(n < 1 || n > 50){
+            reportFatalError("Amount of commands is Not a Number");
+            return;
+        }
+         
+        for(int i = 0; i < n; i++){ 
+            OperationType operation = parseOperation(scanner.next());
+            String a = scanner.next();
+            String b = scanner.next();
+
+            String result = null;
+            
+            switch(operation){
+                case ADDITION:
+                    result = calculator.add(a, b);
+                    break;
+                
+                case SUBTRACTION:
+                    result = calculator.substract(a, b);
+                    break;
+                
+                case MULTIPLICATION:
+                    result = calculator.multiply(a, b);
+                    break;
+                    
+                case DIVISION:
+                    result = calculator.divide(a, b);
+                    break;
+                    
+                case INCORRECT:
+                    result = "Wrong operation type";
+                    break;
+                }
+            System.out.println(result);
+                
+        }
+
+        
+        scanner.close();
+    }
+    
+    public static CalculatorType readCalculator(){
+
+        String type = scanner.nextLine();
+        
+        if(type.equals("INTEGER")){
+            return CalculatorType.INTEGER;
+        }
+        else if(type.equals("DOUBLE")){
+            return CalculatorType.DOUBLE;
+        }
+        else if(type.equals("STRING")){
+            return CalculatorType.STRING;
+        }
+        else{
+            return CalculatorType.INCORRECT;
+        }
+    }
+    
+    public static int readCommandsNumber(){
+ 
+        try{
+            return Integer.parseInt(scanner.nextLine());
+        }
+        catch(NumberFormatException e){
+            return -1;
+        }
+        
+        
+    }
+
+    public static OperationType parseOperation(String operation){
+        if(operation.equals("+")){
+            return OperationType.ADDITION;
+        }
+        else if(operation.equals("-")){
+            return OperationType.SUBTRACTION;
+        }
+        else if(operation.equals("*")){
+            return OperationType.MULTIPLICATION;
+        }
+        else if(operation.equals("/")){
+            return OperationType.DIVISION;
+        }
+        else{
+            return OperationType.INCORRECT;
+        }
+    }
+    
+    public static void reportFatalError(String err){
+        System.out.println(err);
+    }
+}
+
+
+
 enum CalculatorType{
     INTEGER,
     DOUBLE,
@@ -11,16 +137,16 @@ enum CalculatorType{
 }
 
 enum OperationType{
-    ADD,
-    SUBTRACT,
-    MULTIPLY,
-    DIVIDE,
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION,
+    DIVISION,
     INCORRECT
 }
 
 abstract class Calculator{
     abstract String add(String a, String b);
-    abstract String substraction(String a, String b);
+    abstract String substract(String a, String b);
     abstract String multiply(String a, String b);
     abstract String divide(String a, String b);
 }
@@ -38,7 +164,7 @@ class IntegerCalculator extends Calculator{
     }
 
     @Override
-    String substraction(String a, String b) {
+    String substract(String a, String b) {
         try{
             return Integer.toString(Integer.parseInt(a) - Integer.parseInt(b));
         }
@@ -60,7 +186,7 @@ class IntegerCalculator extends Calculator{
     @Override
     String divide(String a, String b) {
         try{
-            return Integer.toString(Integer.parseInt(a) * Integer.parseInt(b));
+            return Integer.toString(Integer.parseInt(a) / Integer.parseInt(b));
         }
         catch(NumberFormatException e){
             return "Wrong argument type";
@@ -83,7 +209,7 @@ class DoubleCalculator extends Calculator{
     }
 
     @Override
-    String substraction(String a, String b) {
+    String substract(String a, String b) {
         try{
             return Double.toString(Double.parseDouble(a) - Double.parseDouble(b));
         }
@@ -105,6 +231,9 @@ class DoubleCalculator extends Calculator{
     @Override
     String divide(String a, String b) {
         try{
+            if(Math.ceil(Double.parseDouble(b)) == 0){
+                return "Division by zero";
+            }
             return Double.toString(Double.parseDouble(a) / Double.parseDouble(b));
         }
         catch(NumberFormatException e){
@@ -124,7 +253,7 @@ class StringCalculator extends Calculator{
     }
 
     @Override
-    String substraction(String a, String b) {
+    String substract(String a, String b) {
         return "Unsupported operation for strings";
     }
 
@@ -136,6 +265,10 @@ class StringCalculator extends Calculator{
             num = Integer.parseInt(b);
         }
         catch (NumberFormatException e){
+            return "Wrong argument type";
+        }
+
+        if(num <= 0){
             return "Wrong argument type";
         }
 
@@ -151,136 +284,3 @@ class StringCalculator extends Calculator{
     }
 }
 
-
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        CalculatorType calc_type = readCalculator();
-
-        System.out.println(calc_type);
-
-        Calculator calculator = null;
-
-        switch(calc_type){
-            case INTEGER:
-                calculator = new IntegerCalculator();
-                break;
-
-            case DOUBLE:
-                calculator = new DoubleCalculator();
-                break;
-
-            case STRING:
-                calculator = new StringCalculator();
-                break;
-
-            case INCORRECT:
-                reportFatalError("Wrong calculator type");
-                scanner.close();
-                return;
-        }
-
-
-
-        int n = readCommandsNumber();
-        if(n < 1 || n > 50){
-            reportFatalError("Amount of commands is Not a Number");
-            scanner.close();
-            return;
-        }
-
-        for(int i=0; i < n; i++){
-            OperationType operation = parseOperation(scanner.next());
-            String a = scanner.next();
-            String b = scanner.next();
-
-            String result = null;
-
-            switch(operation){
-                case ADD:
-                    result = calculator.add(a, b);
-                    break;
-
-                case SUBTRACT:
-                    result = calculator.substraction(a, b);
-                    break;
-
-                case MULTIPLY:
-                    result = calculator.multiply(a, b);
-                    break;
-
-                case DIVIDE:
-                    result = calculator.divide(a, b);
-                    break;
-
-                case INCORRECT:
-                    reportFatalError("Wrong operation type");
-                    scanner.close();
-                    return;
-            }
-
-            
-            System.out.println(result);
-        }
-
-
-        scanner.close();
-    }
-
-    public static CalculatorType readCalculator(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter calculator type: ");
-        String type = scanner.nextLine();
-
-        if(type.equals("INTEGER")){
-            return CalculatorType.INTEGER;
-        }
-        else if(type.equals("DOUBLE")){
-            return CalculatorType.DOUBLE;
-        }
-        else if(type.equals("STRING")){
-            return CalculatorType.STRING;
-        }
-        else{
-            return CalculatorType.INCORRECT;
-        }
-    }
-
-    public static int readCommandsNumber(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter number of commands: ");
-        try{
-            String num = scanner.nextLine();
-            return Integer.parseInt(num);
-        }
-        catch(NumberFormatException e){
-            reportFatalError("Amount of commands is Not a Number");
-            return 0;
-        }
-       
-    }
-
-    public static OperationType parseOperation(String operation){
-        if(operation.equals("+")){
-            return OperationType.ADD;
-        }
-        else if(operation.equals("-")){
-            return OperationType.SUBTRACT;
-        }
-        else if(operation.equals("*")){
-            return OperationType.MULTIPLY;
-        }
-        else if(operation.equals("/")){
-            return OperationType.DIVIDE;
-        }
-        else{
-            return OperationType.INCORRECT;
-        }
-    }
-
-    public static void reportFatalError(String err){
-        System.out.println(err);
-    }
-}
