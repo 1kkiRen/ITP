@@ -26,7 +26,8 @@ public final class Main {
      * @param args
      */
     public static void main(String[] args) {
-        CalculatorType calcType = readCalculator();
+        Main main = new Main();
+        CalculatorType calcType = main.readCalculator();
         Calculator calculator = null;
         switch (calcType) {
             case INTEGER:
@@ -39,21 +40,21 @@ public final class Main {
                 calculator = new StringCalculator();
                 break;
             case INCORRECT:
-                reportFatalError("Wrong calculator type");
+                main.reportFatalError("Wrong calculator type");
                 return;
             default:
                 break;
         }
 
-        int n = readCommandsNumber();
+        int n = main.readCommandsNumber();
 
         if (n < MIN_COMMAND_NUMBER || n > MAX_COMMANDS_NUMBER) {           // check if the number of commands is correct
-            reportFatalError("Amount of commands is Not a Number");
+            main.reportFatalError("Amount of commands is Not a Number");
             return;
         }
 
         for (int i = 0; i < n; i++) {
-            OperationType operation = parseOperation(scanner.next());
+            OperationType operation = main.parseOperation(scanner.next());
             String a = scanner.next();
             String b = scanner.next();
 
@@ -91,7 +92,7 @@ public final class Main {
      * This method reads the calculator type.
      * @return calculator type.
      */
-    private static CalculatorType readCalculator() {
+    private CalculatorType readCalculator() {
 
         String type = scanner.nextLine();
         if (type.equals("INTEGER")) {
@@ -110,7 +111,7 @@ public final class Main {
      * This method reads the number of commands.
      * @return number of commands.
      */
-    private static int readCommandsNumber() {
+    private int readCommandsNumber() {
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
@@ -122,7 +123,7 @@ public final class Main {
      * @param operation
      * @return operation type.
      */
-    private static OperationType parseOperation(String operation) {
+    private OperationType parseOperation(String operation) {
         if (operation.equals("+")) {
             return OperationType.ADDITION;
         } else
@@ -142,7 +143,7 @@ public final class Main {
      * This method reports the fatal error.
      * @param err
      */
-    private static void reportFatalError(String err) {
+    private void reportFatalError(String err) {
         System.out.println(err);
     }
     private Main() { }
