@@ -5,5 +5,7 @@
         "system_error": "c",
         "xlocale": "c",
         "cmath": "c"
-    }
+    },
+    "java.checkstyle.configuration": "${workspaceFolder}\\ass3\\ITP_checks.xml",
+    "java.checkstyle.version": "10.4"
 }
