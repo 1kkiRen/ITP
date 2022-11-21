@@ -24,8 +24,8 @@ class Position {
     private int y;
 
     Position(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.x = x - 1;
+        this.y = y - 1;
     }
 
     public int getX() {
@@ -311,14 +311,14 @@ class Pawn extends ChessPiece {
         int y = position.getY();
 
         if(color == PieceColor.WHITE){
-            if(x + 1 < boardSize){
-                if(positions.get((x + 1) + " " + y) == null){
+            if(y + 1 < boardSize){
+                if(positions.get(x + " " + (y + 1)) == null){
                     count++;
                 }
             }
         } else {
-            if(x - 1 >= 0){
-                if(positions.get((x - 1) + " " + y) == null){
+            if(y - 1 >= 0){
+                if(positions.get(x + " " + (y - 1)) == null){
                     count++;
                 }
             }
@@ -339,20 +339,20 @@ class Pawn extends ChessPiece {
                 }
             }
 
-            if(x + 1 < boardSize && y - 1 >= 0){
-                if(positions.get((x + 1) + " " + (y - 1)) != null && positions.get((x + 1) + " " + (y - 1)).getColor() != color){
+            if(x - 1 < boardSize && y + 1 >= 0){
+                if(positions.get((x - 1) + " " + (y + 1)) != null && positions.get((x - 1) + " " + (y + 1)).getColor() != color){
                     count++;
                 }
             }
         } else {
-            if(x - 1 >= 0 && y + 1 < boardSize){
-                if(positions.get((x - 1) + " " + (y + 1)) != null && positions.get((x - 1) + " " + (y + 1)).getColor() != color){
+            if(x - 1 >= 0 && y - 1 < boardSize){
+                if(positions.get((x - 1) + " " + (y - 1)) != null && positions.get((x - 1) + " " + (y - 1)).getColor() != color){
                     count++;
                 }
             }
 
             if(x - 1 >= 0 && y - 1 >= 0){
-                if(positions.get((x - 1) + " " + (y - 1)) != null && positions.get((x - 1) + " " + (y - 1)).getColor() != color){
+                if(positions.get((x + 1) + " " + (y - 1)) != null && positions.get((x + 1) + " " + (y - 1)).getColor() != color){
                     count++;
                 }
             }
@@ -378,7 +378,7 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
     }
 
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize){
-        return getDiagonalMovesCount(position, color, positions, boardSize) + getOrthogonalMovesCount(position, color, positions, boardSize);
+        return getDiagonalMovesCount(position, color, positions, boardSize);// + getOrthogonalMovesCount(position, color, positions, boardSize);
     }
 
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize){
@@ -393,6 +393,8 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         for(int i = 1; i < boardSize; i++){
             if(x + i < boardSize && y + i < boardSize){
                 if(positions.get((x + i) + " " + (y + i)) == null){
+                    System.out.println((x + i) + " " + (y + i));
+                    System.out.println(positions.get((x + i) + " " + (y + i)));
                     count++;
                 } else {
                     break;
@@ -403,6 +405,8 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         for(int i = 1; i < boardSize; i++){
             if(x + i < boardSize && y - i >= 0){
                 if(positions.get((x + i) + " " + (y - i)) == null){
+                    System.out.println((x + i) + " " + (y - i));
+                    System.out.println(positions.get((x + i) + " " + (y - i)));
                     count++;
                 } else {
                     break;
@@ -413,6 +417,8 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         for(int i = 1; i < boardSize; i++){
             if(x - i >= 0 && y + i < boardSize){
                 if(positions.get((x - i) + " " + (y + i)) == null){
+                    System.out.println((x - i) + " " + (y + i));
+                    System.out.println(positions.get((x - i) + " " + (y + i)));
                     count++;
                 } else {
                     break;
@@ -423,6 +429,8 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         for(int i = 1; i < boardSize; i++){
             if(x - i >= 0 && y - i >= 0){
                 if(positions.get((x - i) + " " + (y - i)) == null){
+                    System.out.println((x - i) + " " + (y - i));
+                    System.out.println(positions.get((x - i) + " " + (y - i)));
                     count++;
                 } else {
                     break;
@@ -477,6 +485,106 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
                     count++;
                     break;
                 } else if(positions.get((x - i) + " " + (y - i)) != null && positions.get((x - i) + " " + (y - i)).getColor() == color){
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public int getOrthogonalMovesCount(Position position, PieceColor color, Map<String, ChessPiece> positions, int boardSize){
+        int count = 0;
+        int x = position.getX();
+        int y = position.getY();
+
+        for(int i = 1; i < boardSize; i++){
+            if(x + i < boardSize){
+                if(positions.get((x + i) + " " + y) == null){
+                    count++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        for(int i = 1; i < boardSize; i++){
+            if(x - i >= 0){
+                if(positions.get((x - i) + " " + y) == null){
+                    count++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        for(int i = 1; i < boardSize; i++){
+            if(y + i < boardSize){
+                if(positions.get(x + " " + (y + i)) == null){
+                    count++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        for(int i = 1; i < boardSize; i++){
+            if(y - i >= 0){
+                if(positions.get(x + " " + (y - i)) == null){
+                    count++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    public int getOrthogonalCapturesCount(Position position, PieceColor color, Map<String, ChessPiece> positions, int boardSize){
+        int count = 0;
+        int x = position.getX();
+        int y = position.getY();
+
+        for(int i = 1; i < boardSize; i++){
+            if(x + i < boardSize){
+                if(positions.get((x + i) + " " + y) != null && positions.get((x + i) + " " + y).getColor() != color){
+                    count++;
+                    break;
+                } else if(positions.get((x + i) + " " + y) != null && positions.get((x + i) + " " + y).getColor() == color){
+                    break;
+                }
+            }
+        }
+
+        for(int i = 1; i < boardSize; i++){
+            if(x - i >= 0){
+                if(positions.get((x - i) + " " + y) != null && positions.get((x - i) + " " + y).getColor() != color){
+                    count++;
+                    break;
+                } else if(positions.get((x - i) + " " + y) != null && positions.get((x - i) + " " + y).getColor() == color){
+                    break;
+                }
+            }
+        }
+
+        for(int i = 1; i < boardSize; i++){
+            if(y + i < boardSize){
+                if(positions.get(x + " " + (y + i)) != null && positions.get(x + " " + (y + i)).getColor() != color){
+                    count++;
+                    break;
+                } else if(positions.get(x + " " + (y + i)) != null && positions.get(x + " " + (y + i)).getColor() == color){
+                    break;
+                }
+            }
+        }
+
+        for(int i = 1; i < boardSize; i++){
+            if(y - i >= 0){
+                if(positions.get(x + " " + (y - i)) != null && positions.get(x + " " + (y - i)).getColor() != color){
+                    count++;
+                    break;
+                } else if(positions.get(x + " " + (y - i)) != null && positions.get(x + " " + (y - i)).getColor() == color){
                     break;
                 }
             }
@@ -606,14 +714,14 @@ class Rook extends ChessPiece implements RookMovement {
     }
 
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize){
-        return getLinearMovesCount(position, color, positions, boardSize);
+        return getOrthogonalMovesCount(position, color, positions, boardSize);
     }
 
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize){
-        return getLinearCapturesCount(position, color, positions, boardSize);
+        return getOrthogonalCapturesCount(position, color, positions, boardSize);
     }
 
-    public int getLinearMovesCount(Position position, PieceColor color, Map<String, ChessPiece> positions, int boardSize){
+    public int getOrthogonalMovesCount(Position position, PieceColor color, Map<String, ChessPiece> positions, int boardSize){
         int count = 0;
         int x = position.getX();
         int y = position.getY();
@@ -661,7 +769,8 @@ class Rook extends ChessPiece implements RookMovement {
         return count;
     }
 
-    public int getLinearCapturesCount(Position position, PieceColor color, Map<String, ChessPiece> positions, int boardSize){
+
+    public int getOrthogonalCapturesCount(Position position, PieceColor color, Map<String, ChessPiece> positions, int boardSize){
         int count = 0;
         int x = position.getX();
         int y = position.getY();
@@ -711,7 +820,6 @@ class Rook extends ChessPiece implements RookMovement {
         }
 
         return count;
-
     }
 }
 
@@ -729,10 +837,11 @@ class Board {
         piecePosition.put(piece.getPosition().toString(), piece);
     }
 
-    public Map<String, ChessPiece> getPiece() {
-        return piecePosition;
+    public ChessPiece getPiece(Position piecePosition) {
+        return this.piecePosition.get(piecePosition.toString());
     }
-
+    
+    
     public int getPiecePossibleMovesCount(ChessPiece piece) {
         return piece.getMovesCount(piecePosition, size);
     }
@@ -745,7 +854,43 @@ class Board {
 public class Main {
     private Board chessBoard;
     public static void main(String[] args) {
+        Main main = new Main();
+        main.chessBoard = new Board(8);
+
+        main.chessBoard.addPiece(new King(new Position(4, 8), PieceColor.WHITE));
+        main.chessBoard.addPiece(new King(new Position(6, 5), PieceColor.BLACK));
+
+        main.chessBoard.addPiece(new Queen(new Position(3, 6), PieceColor.WHITE));
+
+        main.chessBoard.addPiece(new Rook(new Position(3, 2), PieceColor.WHITE));
+
+        main.chessBoard.addPiece(new Pawn(new Position(7, 2), PieceColor.BLACK));
+        main.chessBoard.addPiece(new Pawn(new Position(8, 1), PieceColor.BLACK));
         
+
+        System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(4, 8))));
+        System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(4, 8))));
+
+        System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(6, 5))));
+        System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(6, 5))));
+
+        System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(3, 6))));
+        System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(3, 6))));
+
+        System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(3, 2))));
+        System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(3, 2))));
+
+        System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(7, 2))));
+        System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(7, 2))));
+
+        System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(8, 1))));
+        System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(8, 1))));
+
+       
+
+
+
+
     }
 
 }
