@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Midterm. Theoretical questions</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js">
+  </script>
+<script>
+let theor=[
+"Explain countability and  dense subset of the rationals. Show an example of irrational number and prove its irrationality.",
+"Definitions of a bounded and convergent sequence, examples.",
+"Theorem about existence of only one limit of a convergent sequence. Show proof of this theorem.",
+"Theorem about limit of bounded monotonously growing sequence. Show proof of this theorem.",
+"The Bolzano-Weierstrass theorem about existence of the convergent subsequence for any bounded sequence. Show proof of this theorem.",
+"Definition of the superior limit for the sequence. Examples.",
+"The Bernuolly theorem about the number \\(e\\). A proof.",
+"Different forms of functions definitions: explicit, implicit and parametric.",
+"Two different definitions for a limit of a function. Clarify an equivalence of both definitions. Examples.",
+"A rule of changing of variable into the limit: theorem, proof, example. counterexample.",
+"A definition of continuous function. Examples of continuous and discontinuous ones.",
+"Asymptotic properties, definitions and examples."
+]
+let theor2=[
+"Formulate and prove an intermediate value  theorem for continuous functions.",
+"An asymptotic properties. Define the sign big-O. Show examples.",
+"Define the asymptotic equivalence propery. Show examples.",
+"Formulate and pffve the theorem about order of difference  two asymptotically equivalent functions.",
+"Explain geometrical sence of a derivative. Define a formula for a tangent line for a curve.",
+"What is a differential of a function? Show definition and give examples.",
+"Notations of the derivative. Explain the notations for the high-order derivative though a difference operator.Applications of the derivative in physics",
+"Derivative of elementary functions. Derive the derivative of  \\(\\sin(x)\\), \\(\\tan(x)\\).",
+"Derive the derivative of \\( x^a\\) for real value of parameter \\(a\\)",
+"Derive rules for the derivative of a multiplication and a fracfion of two functions. Give examples.",
+"Derive the chain rule for the derivative. Give examples.",
+"Explain rules for derivative of implicit functions. Show examples.",
+"Derive a formula for derivative of function in parametirc form. Show examples.",
+"Derive a formula for a derivative of an inverce function. Deriva a formula for arcsin(x), arctan(x)",
+"Theorem about existance of an inverse function. Give examples.",
+"The Fermat's lemma. A proof, geometrical sense  and examples.",
+"The Rolle's theorem. A proof and examples.",
+"The Lagrange's theorem. A proof and geometrical sense.",
+"The Cauchy theorem. Show a proof and an usage.",
+"L'Hopital's rule. Show a roof and an usage for \\(0/0,\\,\\infty/\\infty,0\\times\\infty \\).",
+"Taylor's formula and the residue in the Peano form. Derive and show the usage."
+]
+</script>
+</head>
+<body>
+<script>
+let n=prompt("Print nickname for training . Keep empty to see a full list");
+x=n.length;
+if (x<1){
+	document.write("<h3>Full list of theoretical Questions.</h3>");
+	document.write("<ol>");
+	for (let i=0; i<theor.length; i++){
+		document.write("<li>"); 
+		document.write(theor[i]);
+		}
+	for (let i=0; i<theor2.length; i++){
+		document.write("<li>"); 
+		document.write(theor2[i]);
+		}
+	document.write("</ol>");
+	}
+if (x>2){
+	if (x>2){n0=97*n.charCodeAt(1)+107*n.charCodeAt(0)*2};
+	if (x<3){n0=83*n.charCodeAt(0)};
+	document.write("<h3>Questions for ");document.write(n);document.write("</h3>");
+	document.write("<ol>");
+	document.write("<br><b>Question</b><li>"); document.write(theor[n0%12]);
+	document.write("<br><b>Question</b><li>"); document.write(theor2[n0%21]);
+	document.write("</ol>");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sequences and limits </title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js">
+  </script>
+<script>
+let theor=[
+"Explain countability and  dense subset of the rationals. Show an example of irrational number and prove its irrationality.",
+"Definitions of a bounded and convergent sequence, examples.",
+"Theorem about existence of only one limit of a convergent sequence. Show proof of this theorem.",
+"Theorem about limit of bounded monotonously growing sequence. Show proof of this theorem.",
+"The Bolzano-Weierstrass theorem about existence of the convergent subsequence for any bounded sequence. Show proof of this theorem.",
+"Definition of the superior limit for the sequence. Examples.",
+"The Bernuolly theorem about the number $e$. Proof.",
+"Different forms of functions definitions: explicit, implicit and parametric.",
+"Two different definitions for a limit of a function. Clarify its equivalence. Examples.",
+"A rule of changing of variable into the limit: theorem, proof, example. counterexample.",
+"A definition of continuous function. Examples of continuous and discontinuous ones.",
+"Asymptotic properties, definitions and examples."
+]
+let pract=[
+"Find the limit \\[\\lim_{x\\to0}\\frac{\\sin(1-\\cos(x))}{\\sin(x)}\\].",
+"Find the limit \\[\\lim_{x\\to0}\\frac{\\sin(\\sin(x))}{\\sin(x)}\\].",
+"Find the limit \\[\\lim_{x\\to0}\\frac{\\sin(x)}{\\sin(\\sqrt{x})}\\].",  
+"Find the limit \\[\\lim_{x\\to\\infty}\\frac{2x+3s}{5x+7}.\\]",  
+"Find the limit \\[\\lim_{x\\to\\infty}\\frac{x^4+x^3}{12x^3+128}.\\]", 
+"Find the limit \\[\\lim_{x\\to1}\\frac{\\sqrt[3]{x}-1}{\\sqrt{x}-1}.\\]",
+"Find the limit \\[\\lim_{x\\to64}\\frac{\\sqrt[3]{x^2}-16}{\\sqrt{x}-8}.\\]",
+"Define an order of \\[\\tan(x)-\\sin(x)\\] with respect to \\[x\\].",
+"Define an order of \\[ 1-\\cos(x)\\] with respect to \\[x\\].",
+"Define an order of volume of ball surface with small radius.",
+"Show that \\[\\frac{x}{2}\\sim\\sqrt{1+x}-1\\]",
+"Show that \\[\\frac{1}{1+x}\\sim 1-x\\]",
+"Show that \\[ (1+x)^n\sim nx,\quad x\to0.\\]",
+"Find a limit \\[\\lim_{x\\to0}\\frac{\\cos(x)-\\cos(2x)}{1-\\cos(x)}\\]",
+"Define continuous function \\[\\frac{1-\\cos(x)}{x^2}\\] at the point \\[x=0\\]",
+"Proove that an equation \\[\\tan(x)=0\\] have infinity solutions.",
+"Is the function \\[\\log(\\cos(x)\\] continuous?",
+"Is the function \\[\\frac{\\sqrt{7+x}-3}{x^2-4}\\] continuous?",
+"Define a continuous function \\[\\frac{\\log(1+x)-\\log(1-x)}{x}\\]"
+]
+</script>
+</head>
+<body>
+<script>
+
+let n=prompt("Your name or nickname")
+x=n.length;
+if (x>2){n0=97*n.charCodeAt(1)+107*n.charCodeAt(0)*2};
+if (x<3){n0=83*n.charCodeAt(0)};
+document.write("<h3>Questions for ");document.write(n);document.write("</h3>");
+document.write("<ol>");
+document.write("<br><b>Question</b><li>"); document.write(theor[n0%12]);
+document.write("<br><b>Question</b><li>"); document.write(pract[n0%19]);
+document.write("</ol>");
+</script>
+</body>
+</html>

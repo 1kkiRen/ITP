@@ -1,4 +1,4 @@
-package ass3;
+package assignment;
 
 import java.util.Scanner;
 
@@ -7,28 +7,28 @@ import java.util.Scanner;
  */
 public final class Main {
     /**
-     * Variable for Scanner class.
+     * Static variable for Scanner class.
      */
-    private Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Variable for the max number of commands.
+     * Static variable for the max number of commands.
      */
-    private final int maxCommandsNumber = 50;
+    public static final int MAX_COMMANDS_NUMBER = 50;
 
     /**
-     * Variable for the min number of commands.
+     * Static variable for the min number of commands.
      */
-    private final int minCommandsNumber = 1;
+    public static final int MIN_COMMAND_NUMBER = 1;
 
     private Main() { };
+
     /**
      * This is the main method which makes central logic of the program.
      * @param args
      */
     public static void main(String[] args) {
-        Main main = new Main();
-        CalculatorType calcType = main.readCalculator();
+        CalculatorType calcType = readCalculator();
         Calculator calculator = null;
         switch (calcType) {
             case INTEGER:
@@ -41,24 +41,23 @@ public final class Main {
                 calculator = new StringCalculator();
                 break;
             case INCORRECT:
-                main.reportFatalError("Wrong calculator type");
+                reportFatalError("Wrong calculator type");
                 return;
             default:
                 break;
         }
 
-        int n = main.readCommandsNumber();
+        int n = readCommandsNumber();
 
-        // check if the number of commands is correct
-        if (n < main.minCommandsNumber || n > main.maxCommandsNumber) {
-            main.reportFatalError("Amount of commands is Not a Number");
+        if (n < MIN_COMMAND_NUMBER || n > MAX_COMMANDS_NUMBER) {           // check if the number of commands is correct
+            reportFatalError("Amount of commands is Not a Number");
             return;
         }
 
         for (int i = 0; i < n; i++) {
-            OperationType operation = main.parseOperation(main.scanner.next());
-            String a = main.scanner.next();
-            String b = main.scanner.next();
+            OperationType operation = parseOperation(scanner.next());
+            String a = scanner.next();
+            String b = scanner.next();
 
             String result = null;
 
@@ -88,13 +87,13 @@ public final class Main {
             System.out.println(result);
         }
 
-        main.scanner.close();
+        scanner.close();
     }
     /**
      * This method reads the calculator type.
      * @return calculator type.
      */
-    private CalculatorType readCalculator() {
+    private static CalculatorType readCalculator() {
 
         String type = scanner.nextLine();
         if (type.equals("INTEGER")) {
@@ -113,7 +112,7 @@ public final class Main {
      * This method reads the number of commands.
      * @return number of commands.
      */
-    private int readCommandsNumber() {
+    private static int readCommandsNumber() {
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
@@ -125,7 +124,7 @@ public final class Main {
      * @param operation
      * @return operation type.
      */
-    private OperationType parseOperation(String operation) {
+    private static OperationType parseOperation(String operation) {
         if (operation.equals("+")) {
             return OperationType.ADDITION;
         } else
@@ -145,7 +144,7 @@ public final class Main {
      * This method reports the fatal error.
      * @param err
      */
-    private void reportFatalError(String err) {
+    private static void reportFatalError(String err) {
         System.out.println(err);
     }
 }
