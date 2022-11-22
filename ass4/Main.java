@@ -132,8 +132,6 @@ public final class Main {
 
                 out.write(String.valueOf(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(x, y))) + " " + main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(x, y))) + "\n").getBytes());
 
-                // System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(x, y))) + " " + main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(x, y))));
-                // System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(x, y))));
             }
         }
             
