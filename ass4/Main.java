@@ -1,6 +1,7 @@
 package ass4;
 
 
+
 import java.util.*;
 import java.io.*;
 public final class Main {
@@ -9,16 +10,13 @@ public final class Main {
         Main main = new Main();
 
 
-
-
+        String inputFile = "C://Users//dmitr//Documents//Inno//ass4//input.txt";
+        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
         // String inputFile = "input.txt";
         // String outputFile = "output.txt";
 
-        String inputFile = "C://Users//dmitr//Documents//Inno//ass4//input.txt";
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-
         try(FileInputStream in = new FileInputStream(inputFile);
-        FileOutputStream out = new FileOutputStream(outputFile))
+        FileOutputStream out = new FileOutputStream(outputFile);)
         {
             byte[] buffer = new byte[in.available()];
             in.read(buffer, 0, buffer.length);
@@ -30,7 +28,6 @@ public final class Main {
             try{
                 n = Integer.parseInt(input[0]);
             } catch (NumberFormatException e){
-                e.addSuppressed(e);
                 throw new InvalidBoardSizeException();
             }
 
@@ -61,9 +58,9 @@ public final class Main {
                 String colorIn = input[i + 1];
                 PieceColor color = PieceColor.parse(colorIn);
 
-                // if (color == null){
-                //     throw new InvalidPieceColorException();
-                // }
+                if (color == null){
+                    throw new InvalidPieceColorException();
+                }
 
                 try{
                     x = Integer.parseInt(input[i + 2]);
@@ -71,8 +68,6 @@ public final class Main {
                 } catch (NumberFormatException e){
                     throw new InvalidPiecePositionException();
                 }
-
-                
 
                 if(x < 1 || x > n || y < 1 || y > n){
                     throw new InvalidPiecePositionException();
@@ -103,9 +98,7 @@ public final class Main {
                         main.chessBoard.addPiece(new Pawn(new Position(x, y), color));
                         break;
                     default:
-                        out.write(String.valueOf(new InvalidPieceNameException().getMessage()).getBytes());
-                        return;
-
+                        throw new InvalidPieceNameException();
                 }
 
                 if (whiteKingCount > 1 || blackKingCount > 1){
@@ -1006,14 +999,14 @@ class InvalidBoardSizeException extends Exception {
         try(FileOutputStream out = new FileOutputStream(outputFile))
         {
             out.write("Invalid board size".getBytes());
-            return " ";
+            return "Invalid board size";
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
             ex.addSuppressed(ex);
         }
 
-        return "H p s";
+        return "Invalid board size";
     }
 }
 
@@ -1024,31 +1017,31 @@ class InvalidNumerOfPiecesException extends Exception {
         try(FileOutputStream out = new FileOutputStream(outputFile))
         {
             out.write("Invalid number of pieces".getBytes());
-            return " ";
+            return "Invalid number of pieces";
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
             ex.addSuppressed(ex);
         }
 
-        return "H p s";
+        return "Invalid number of pieces";
    
     }
 }
 
 class InvalidPieceNameException extends Exception {
     public String getMessage() {
-        // String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // // String outputFile = "output.txt";
-        // try(FileOutputStream out = new FileOutputStream(outputFile))
-        // {
-        //     out.write("Invalid piece name".getBytes());
-        //     return " ";
-        // }
-        // catch(IOException ex){
-        //     System.out.println(ex.getMessage());
-        //     ex.addSuppressed(ex);
-        // }
+        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
+        // String outputFile = "output.txt";
+        try(FileOutputStream out = new FileOutputStream(outputFile))
+        {
+            out.write("Invalid piece name".getBytes());
+            return "Invalid piece name";
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+            ex.addSuppressed(ex);
+        }
 
         return "Invalid piece name";
     }
@@ -1061,14 +1054,14 @@ class InvalidPieceColorException extends Exception {
         try(FileOutputStream out = new FileOutputStream(outputFile))
         {
             out.write("Invalid piece color".getBytes());
-            return " ";
+            return "Invalid piece color";
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
             ex.addSuppressed(ex);
         }
 
-        return "H p s";
+        return "Invalid piece color";
     }
 }
 
@@ -1079,14 +1072,14 @@ class InvalidPiecePositionException extends Exception {
         try(FileOutputStream out = new FileOutputStream(outputFile))
         {
             out.write("Invalid piece position".getBytes());
-            return " ";
+            return "Invalid piece position";
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
             ex.addSuppressed(ex);
         }
 
-        return "H p s";
+        return "Invalid piece position";
     }
 }
 
@@ -1097,14 +1090,14 @@ class InvalidGivenKingsException extends Exception {
         try(FileOutputStream out = new FileOutputStream(outputFile))
         {
             out.write("Invalid given Kings".getBytes());
-            return " ";
+            return "Invalid given Kings";
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
             ex.addSuppressed(ex);
         }
 
-        return "H p s";
+        return "Invalid given Kings";
     }
 }
 
@@ -1115,13 +1108,13 @@ class InvalidInputException extends Exception {
         try(FileOutputStream out = new FileOutputStream(outputFile))
         {
             out.write("Invalid input".getBytes());
-            return " ";
+            return "Invalid input";
         }
         catch(IOException ex){
             System.out.println(ex.getMessage());
             ex.addSuppressed(ex);
         }
 
-        return "H p s";
+        return "Invalid input";
     }
 }
