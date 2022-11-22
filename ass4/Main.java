@@ -1,7 +1,5 @@
 package ass4;
 
-
-
 import java.util.*;
 import java.io.*;
 public final class Main {
@@ -36,9 +34,9 @@ public final class Main {
                 out.write(String.valueOf(new InvalidBoardSizeException().getMessage()).getBytes());
                 return;
             }
-
+            
             main.chessBoard = new Board(n);
-
+            
             int m;
             try{
                 m = Integer.parseInt(input[1]);
@@ -46,25 +44,23 @@ public final class Main {
                 out.write(String.valueOf(new InvalidNumerOfPiecesException().getMessage()).getBytes());
                 return;
             }
-
+            
             if (m < 2 || m > n * n){
                 out.write(String.valueOf(new InvalidNumerOfPiecesException().getMessage()).getBytes());
                 return;
             }
-
+            
             int whiteKingCount = 0, blackKingCount = 0;
-
-            for(int i = 2; i < m * 4 + 2; i += 4){
+            int k = m * 4 + 2;
+            
+            for(int i = 2; i < k; i += 4){
                 int x, y;
 
                 String pieceType = input[i];
 
                 PieceName pieceName = PieceName.parse(pieceType);
-
-                String colorIn = input[i + 1];
-
                 
-                PieceColor color = PieceColor.parse(colorIn);
+                PieceColor color = PieceColor.parse(input[i + 1]);
 
 
                 if (pieceName == null){
@@ -88,6 +84,11 @@ public final class Main {
                 }
                 
                 if(x < 1 || x > n || y < 1 || y > n){
+                    out.write(String.valueOf(new InvalidPiecePositionException().getMessage()).getBytes());
+                    return;
+                }
+
+                if (main.chessBoard.getPiece(new Position(x, y)) != null){
                     out.write(String.valueOf(new InvalidPiecePositionException().getMessage()).getBytes());
                     return;
                 }
@@ -123,8 +124,19 @@ public final class Main {
                         return;
                     }
                     
-                }
-            int k = m * 4 + 2;
+            }
+
+            try{
+                input[k] = input[k].replace("\r\n", "");
+                out.write(String.valueOf(new InvalidNumerOfPiecesException().getMessage()).getBytes());
+                return;
+            } catch (ArrayIndexOutOfBoundsException e){}
+
+
+            if (whiteKingCount == 0 || blackKingCount == 0){
+                out.write(String.valueOf(new InvalidGivenKingsException().getMessage()).getBytes());
+                return;
+            }
             
             for(int i = 2; i < k; i += 4){
                 int x = Integer.parseInt(input[i + 2]);
@@ -193,7 +205,6 @@ enum PieceName{
 
    
 }
-
 
 class Position {
     private int x;
@@ -531,7 +542,7 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
 
         for(int i = 1; i < boardSize; i++){
             if(x + i < boardSize && y + i < boardSize){
-                if(positions.get("(" + (x + i) + ", " + (y + i) + ")" + ")") == null){
+                if(positions.get("(" + (x + i) + ", " + (y + i) + ")") == null){
                     count++;
                 } else {
                     break;
@@ -930,10 +941,10 @@ class Rook extends ChessPiece implements RookMovement {
 
         for(int i = 1; i < boardSize; i++){
             if(y + i < boardSize){
-                if(positions.get("(" +"(" + x + ", " + (y + i) + ")") != null && positions.get("(" +x + ", " + (y + i) + ")").getColor() != color){
+                if(positions.get("(" + x + ", " + (y + i) + ")") != null && positions.get("(" + x + ", " + (y + i) + ")").getColor() != color){
                     count++;
                     break;
-                } else if(positions.get("(" +"(" + x + ", " + (y + i) + ")") != null && positions.get("(" +x + ", " + (y + i) + ")").getColor() == color){
+                } else if(positions.get("(" + x + ", " + (y + i) + ")") != null && positions.get("(" + x + ", " + (y + i) + ")").getColor() == color){
                     break;
                 }
             }
@@ -941,10 +952,10 @@ class Rook extends ChessPiece implements RookMovement {
 
         for(int i = 1; i < boardSize; i++){
             if(y - i >= 0){
-                if(positions.get("(" +x + ", " + (y - i) + ")") != null && positions.get("(" +x + ", " + (y - i) + ")").getColor() != color){
+                if(positions.get("(" + x + ", " + (y - i) + ")") != null && positions.get("(" + x + ", " + (y - i) + ")").getColor() != color){
                     count++;
                     break;
-                } else if(positions.get("(" +x + ", " + (y - i) + ")") != null && positions.get("(" +x + ", " + (y - i) + ")").getColor() == color){
+                } else if(positions.get("(" + x + ", " + (y - i) + ")") != null && positions.get("(" + x + ", " + (y - i) + ")").getColor() == color){
                     break;
                 }
             }
