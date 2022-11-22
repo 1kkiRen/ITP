@@ -28,11 +28,13 @@ public final class Main {
             try{
                 n = Integer.parseInt(input[0]);
             } catch (NumberFormatException e){
-                throw new InvalidBoardSizeException();
+                out.write(String.valueOf(new InvalidBoardSizeException().getMessage()).getBytes());
+                return;
             }
 
             if(n < 3 || n > 1000){
-                throw new InvalidBoardSizeException();
+                out.write(String.valueOf(new InvalidBoardSizeException().getMessage()).getBytes());
+                return;
             }
 
             main.chessBoard = new Board(n);
@@ -41,11 +43,13 @@ public final class Main {
             try{
                 m = Integer.parseInt(input[1]);
             } catch (NumberFormatException e){
-                throw new InvalidNumerOfPiecesException();
+                out.write(String.valueOf(new InvalidNumerOfPiecesException().getMessage()).getBytes());
+                return;
             }
 
             if (m < 2 || m > n * n){
-                throw new InvalidNumerOfPiecesException();
+                out.write(String.valueOf(new InvalidNumerOfPiecesException().getMessage()).getBytes());
+                return;
             }
 
             int whiteKingCount = 0, blackKingCount = 0;
@@ -55,26 +59,41 @@ public final class Main {
 
                 String pieceType = input[i];
 
+                PieceName pieceName = PieceName.parse(pieceType);
+
                 String colorIn = input[i + 1];
+
+                
                 PieceColor color = PieceColor.parse(colorIn);
 
-                if (color == null){
-                    throw new InvalidPieceColorException();
+
+                if (pieceName == null){
+                    out.write(String.valueOf(new InvalidPieceNameException().getMessage()).getBytes());
+                    return;
                 }
 
+                if (color == null){
+                    out.write(String.valueOf(new InvalidPieceColorException().getMessage()).getBytes());
+                    return;
+                }
+                    
+                    
+                
                 try{
                     x = Integer.parseInt(input[i + 2]);
                     y = Integer.parseInt(input[i + 3]);
                 } catch (NumberFormatException e){
-                    throw new InvalidPiecePositionException();
+                    out.write(String.valueOf(new InvalidPiecePositionException().getMessage()).getBytes());
+                    return;
                 }
-
+                
                 if(x < 1 || x > n || y < 1 || y > n){
-                    throw new InvalidPiecePositionException();
+                    out.write(String.valueOf(new InvalidPiecePositionException().getMessage()).getBytes());
+                    return;
                 }
-
-                switch(pieceType){
-                    case "King":
+                
+                switch(pieceName){
+                    case KING:
                         main.chessBoard.addPiece(new King(new Position(x, y), color));
                         if(color == PieceColor.WHITE){
                             whiteKingCount++;
@@ -82,35 +101,31 @@ public final class Main {
                             blackKingCount++;
                         }
                         break;
-                    case "Queen":
+                    case QUEEN:
                         main.chessBoard.addPiece(new Queen(new Position(x, y), color));
                         break;
-                    case "Rook":
+                    case ROOK:
                         main.chessBoard.addPiece(new Rook(new Position(x, y), color));
                         break;
-                    case "Bishop":
+                    case BISHOP:
                         main.chessBoard.addPiece(new Bishop(new Position(x, y), color));
                         break;
-                    case "Knight":
+                    case KNIGHT:
                         main.chessBoard.addPiece(new Knight(new Position(x, y), color));
                         break;
-                    case "Pawn":
+                    case PAWN:
                         main.chessBoard.addPiece(new Pawn(new Position(x, y), color));
                         break;
-                    default:
-                        throw new InvalidPieceNameException();
                 }
-
-                if (whiteKingCount > 1 || blackKingCount > 1){
-                    throw new InvalidGivenKingsException();
+                    
+                    if (whiteKingCount > 1 || blackKingCount > 1){
+                        out.write(String.valueOf(new InvalidGivenKingsException().getMessage()).getBytes());
+                        return;
+                    }
+                    
                 }
-            }
-
-            // System.out.println(main.chessBoard.returnPiecePositions());
-            
-
             int k = m * 4 + 2;
-
+            
             for(int i = 2; i < k; i += 4){
                 int x = Integer.parseInt(input[i + 2]);
                 int y = Integer.parseInt(input[i + 3]);
@@ -120,8 +135,11 @@ public final class Main {
                 // System.out.println(main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new Position(x, y))) + " " + main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(x, y))));
                 // System.out.println(main.chessBoard.getPiecePossibleCapturesCount(main.chessBoard.getPiece(new Position(x, y))));
             }
-            
         }
+            
+            // System.out.println(main.chessBoard.returnPiecePositions());
+
+            
         catch(FileNotFoundException ex){
             System.out.println("File not found");
             ex.addSuppressed(ex);
@@ -146,6 +164,36 @@ enum PieceColor{
             return null;
         }
     }
+}
+
+enum PieceName{
+    KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN;
+
+    public static PieceName parse(String s){
+        if(s.equals("King")){
+            return KING;
+        }
+        else if(s.equals("Queen")){
+            return QUEEN;
+        }
+        else if(s.equals("Rook")){
+            return ROOK;
+        }
+        else if(s.equals("Bishop")){
+            return BISHOP;
+        }
+        else if(s.equals("Knight")){
+            return KNIGHT;
+        }
+        else if(s.equals("Pawn")){
+            return PAWN;
+        }
+        else{
+            return null;
+        }
+    }
+
+   
 }
 
 
@@ -321,51 +369,13 @@ class King extends ChessPiece {
         int x = position.getX();
         int y = position.getY();
 
-        if(x + 1 < boardSize){
-            if(positions.get("(" +(x + 1) + ", " + y + ")") == null){
-                count++;
-            }
-        }
-
-        if(x - 1 >= 0){
-            if(positions.get("(" +(x - 1) + ", " + y + ")") == null){
-                count++;
-            }
-        }
-
-        if(y + 1 < boardSize){
-            if(positions.get("(" +x + ", " + (y + 1) + ")") == null){
-                count++;
-            }
-        }
-
-        if(y - 1 >= 0){
-            if(positions.get("(" +x + ", " + (y - 1) + ")") == null){
-                count++;
-            }
-        }
-
-        if(x + 1 < boardSize && y + 1 < boardSize){
-            if(positions.get("(" +(x + 1) + ", " + (y + 1) + ")") == null){
-                count++;
-            }
-        }
-
-        if(x + 1 < boardSize && y - 1 >= 0){
-            if(positions.get("(" +(x + 1) + ", " + (y - 1) + ")") == null){
-                count++;
-            }
-        }
-
-        if(x - 1 >= 0 && y + 1 < boardSize){
-            if(positions.get("(" +(x - 1) + ", " + (y + 1) + ")") == null){
-                count++;
-            }
-        }
-
-        if(x - 1 >= 0 && y - 1 >= 0){
-            if(positions.get("(" +(x - 1) + ", " + (y - 1) + ")") == null){
-                count++;
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if(x + i >= 0 && x + i < boardSize && y + j >= 0 && y + j < boardSize){
+                    if(positions.get("(" +(x + i) + ", " + (y + j) + ")") == null){
+                        count++;
+                    }
+                }
             }
         }
 
@@ -994,127 +1004,42 @@ class Exception extends Throwable {
 
 class InvalidBoardSizeException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid board size".getBytes());
-            return "Invalid board size";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid board size";
     }
 }
 
 class InvalidNumerOfPiecesException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid number of pieces".getBytes());
-            return "Invalid number of pieces";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid number of pieces";
-   
     }
 }
 
 class InvalidPieceNameException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid piece name".getBytes());
-            return "Invalid piece name";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid piece name";
     }
 }
 
 class InvalidPieceColorException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid piece color".getBytes());
-            return "Invalid piece color";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid piece color";
     }
 }
 
 class InvalidPiecePositionException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid piece position".getBytes());
-            return "Invalid piece position";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid piece position";
     }
 }
 
 class InvalidGivenKingsException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid given Kings".getBytes());
-            return "Invalid given Kings";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid given Kings";
     }
 }
 
 class InvalidInputException extends Exception {
     public String getMessage() {
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String outputFile = "output.txt";
-        try(FileOutputStream out = new FileOutputStream(outputFile))
-        {
-            out.write("Invalid input".getBytes());
-            return "Invalid input";
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-            ex.addSuppressed(ex);
-        }
-
         return "Invalid input";
     }
 }
