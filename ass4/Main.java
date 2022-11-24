@@ -6,11 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 public final class Main {
     /**
      * @param args the command line arguments
      */
-    private Board chessBoard;
+    private static Board chessBoard;
     /**
      * variable for k = m * 4 + 2 expresion.
      */
@@ -32,13 +33,13 @@ public final class Main {
      */
     private static final int MAX_N = 1000;
 
+    private Main() { }
+
     /**
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        Main main = new Main();
-
         String inputFile = "C://Users//dmitr//Documents//Inno//ass4//input.txt";
         String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
         // String inputFile = "input.txt";
@@ -64,7 +65,7 @@ public final class Main {
                 return;
             }
 
-            main.chessBoard = new Board(n);
+            chessBoard = new Board(n);
 
             int m;
             try {
@@ -117,14 +118,14 @@ public final class Main {
                     return;
                 }
 
-                if (main.chessBoard.getPiece(new PiecePosition(x, y)) != null) {
+                if (chessBoard.getPiece(new PiecePosition(x, y)) != null) {
                     out.write(String.valueOf(new InvalidPiecePositionException().getMessage()).getBytes());
                     return;
                 }
 
                 switch (pieceName) {
                     case KING:
-                        main.chessBoard.addPiece(new King(new PiecePosition(x, y), color));
+                        chessBoard.addPiece(new King(new PiecePosition(x, y), color));
                         if (color == PieceColor.WHITE) {
                             whiteKingCount++;
                         } else {
@@ -132,19 +133,19 @@ public final class Main {
                         }
                         break;
                     case QUEEN:
-                        main.chessBoard.addPiece(new Queen(new PiecePosition(x, y), color));
+                        chessBoard.addPiece(new Queen(new PiecePosition(x, y), color));
                         break;
                     case ROOK:
-                        main.chessBoard.addPiece(new Rook(new PiecePosition(x, y), color));
+                        chessBoard.addPiece(new Rook(new PiecePosition(x, y), color));
                         break;
                     case BISHOP:
-                        main.chessBoard.addPiece(new Bishop(new PiecePosition(x, y), color));
+                        chessBoard.addPiece(new Bishop(new PiecePosition(x, y), color));
                         break;
                     case KNIGHT:
-                        main.chessBoard.addPiece(new Knight(new PiecePosition(x, y), color));
+                        chessBoard.addPiece(new Knight(new PiecePosition(x, y), color));
                         break;
                     case PAWN:
-                        main.chessBoard.addPiece(new Pawn(new PiecePosition(x, y), color));
+                        chessBoard.addPiece(new Pawn(new PiecePosition(x, y), color));
                         break;
                     default:
                         break;
@@ -174,9 +175,9 @@ public final class Main {
                 int y = Integer.parseInt(input[i + THREE]);
 
                 out.write(String.valueOf(
-                        main.chessBoard.getPiecePossibleMovesCount(main.chessBoard.getPiece(new PiecePosition(x, y)))
-                                + " " + main.chessBoard.getPiecePossibleCapturesCount(
-                                        main.chessBoard.getPiece(new PiecePosition(x, y)))
+                        chessBoard.getPiecePossibleMovesCount(chessBoard.getPiece(new PiecePosition(x, y)))
+                                + " " + chessBoard.getPiecePossibleCapturesCount(
+                                        chessBoard.getPiece(new PiecePosition(x, y)))
                                 + "\n")
                         .getBytes());
 
@@ -1093,7 +1094,7 @@ class Board {
     }
 
     public ChessPiece getPiece(PiecePosition position) {
-        return this.piecePosition.get(piecePosition.toString());
+        return this.piecePosition.get(position.toString());
     }
 
     public int getPiecePossibleMovesCount(ChessPiece piece) {
