@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Dmitrii Kuzmin
+ */
 public final class Main {
     /**
      * @param args the command line arguments
@@ -33,23 +36,25 @@ public final class Main {
      */
     private static final int MAX_N = 1000;
 
+    /**
+     * Private constructor.
+     */
     private Main() { }
 
     /**
+     * This is the main method which makes central logic of the program.
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
         String inputFile = "C://Users//dmitr//Documents//Inno//ass4//input.txt";
         String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
-        // String inputFile = "input.txt";
-        // String outputFile = "output.txt";
 
         try (FileInputStream in = new FileInputStream(inputFile);
         FileOutputStream out = new FileOutputStream(outputFile);) {
+            // input file buffer
             byte[] buffer = new byte[in.available()];
             in.read(buffer, 0, buffer.length);
-
             String[] input = new String(buffer).split("\r\n| ");
 
             int n;
@@ -162,8 +167,7 @@ public final class Main {
                 input[k] = input[k].replace("\r\n", "");
                 out.write(String.valueOf(new InvalidNumerOfPiecesException().getMessage()).getBytes());
                 return;
-            } catch (ArrayIndexOutOfBoundsException e) {
-            }
+            } catch (ArrayIndexOutOfBoundsException e) { }
 
             if (whiteKingCount == 0 || blackKingCount == 0) {
                 out.write(String.valueOf(new InvalidGivenKingsException().getMessage()).getBytes());
@@ -171,6 +175,8 @@ public final class Main {
             }
 
             for (int i = 2; i < k; i += M_COEF) {
+                /* As we have need to print all pieces' moves in order pieces were given,
+                we can use the same loop and take only piece's position from buffer. */
                 int x = Integer.parseInt(input[i + TWO]);
                 int y = Integer.parseInt(input[i + THREE]);
 
@@ -183,19 +189,25 @@ public final class Main {
 
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("File not found");
+            System.out.println("Invalid input");
             ex.addSuppressed(ex);
         }
     }
 
 }
 
+/** Piece color enumerator. */
 enum PieceColor {
     /**
-     * Enumerated type for piece color.
+     * Enumerated options for piece color.
      */
     WHITE, BLACK;
 
+    /**
+     * This method parses string to PieceColor.
+     * @param s
+     * @return PieceColor
+     */
     public static PieceColor parse(String s) {
         if (s.equals("White")) {
             return WHITE;
@@ -207,12 +219,18 @@ enum PieceColor {
     }
 }
 
+/** Piece name enumerator. */
 enum PieceName {
     /**
-     * Enumerated type for piece name.
+     * Enumerated options for piece name.
      */
     KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN;
 
+    /**
+     * This method parses string to PieceName.
+     * @param s
+     * @return PieceName
+     */
     public static PieceName parse(String s) {
         if (s.equals("King")) {
             return KING;
@@ -239,19 +257,36 @@ class PiecePosition {
     /** y coordinate. */
     private int y;
 
+    /**
+     * Constructor.
+     * @param onX
+     * @param onY
+     */
     PiecePosition(int onX, int onY) {
         this.x = onX - 1;
         this.y = onY - 1;
     }
 
+    /**
+     * Getter for x coordinate.
+     * @return x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Getter for y coordinate.
+     * @return y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * This method connects x and y coordinate into String.
+     * @return String
+     */
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
@@ -263,30 +298,71 @@ abstract class ChessPiece {
     /** Piece color. */
     protected PieceColor color;
 
+    /**
+     * Constructor.
+     * @param piecePosition
+     * @param pieceColor
+     */
     ChessPiece(PiecePosition piecePosition, PieceColor pieceColor) {
         this.position = piecePosition;
         this.color = pieceColor;
     }
 
+    /**
+     * Getter for piece position.
+     * @return position
+     */
     public PiecePosition getPosition() {
         return position;
     }
 
+    /**
+     * Getter for piece color.
+     * @return color
+     */
     public PieceColor getColor() {
         return color;
     }
 
+    /**
+     * This method returns all possible moves for piece.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     public abstract int getMovesCount(Map<String, ChessPiece> positions, int boardSize);
 
+    /**
+     * This method returns all possible captures for piece.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     public abstract int getCapturesCount(Map<String, ChessPiece> positions, int boardSize);
 
 }
 
 class Knight extends ChessPiece {
+    /**
+     * This constructor creates King object.
+     * @param position
+     * @param color
+     */
     Knight(PiecePosition position, PieceColor color) {
         super(position, color);
     }
 
+    /**
+     * This method returns all possible moves for Knight.
+     * 2 forward and 1 left or right.
+     * 2 backward and 1 to the left or right.
+     * 2 left and 1 forward or backward.
+     * 2 right and 1 forward or backward.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
+    @Override
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
         int x = position.getX();
@@ -343,6 +419,13 @@ class Knight extends ChessPiece {
         return count + getCapturesCount(positions, boardSize);
     }
 
+    /**
+     * This method returns all possible captures for Knight.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
+    @Override
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
         int x = position.getX();
@@ -409,10 +492,24 @@ class Knight extends ChessPiece {
 }
 
 class King extends ChessPiece {
+    /**
+     * This constructor creates King object.
+     * @param position
+     * @param color
+     */
     King(PiecePosition position, PieceColor color) {
         super(position, color);
     }
 
+    /**
+     * This method returns all possible moves for King.
+     * 1 left, right, forward or backward.
+     * 1 for each diagonal.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
+    @Override
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
         int x = position.getX();
@@ -431,6 +528,13 @@ class King extends ChessPiece {
         return count + getCapturesCount(positions, boardSize);
     }
 
+    /**
+     * This method returns all possible captures for King.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
+    @Override
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
         int x = position.getX();
@@ -498,10 +602,24 @@ class King extends ChessPiece {
 }
 
 class Pawn extends ChessPiece {
+    /**
+     * This constructor creates Pawn object.
+     * @param position
+     * @param color
+     */
     Pawn(PiecePosition position, PieceColor color) {
         super(position, color);
     }
 
+    /**
+     * This method returns all possible moves for Pawn.
+     * 1 forward.
+     * 1 for each diagonal if there is an enemy piece.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
+    @Override
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
         int x = position.getX();
@@ -524,6 +642,13 @@ class Pawn extends ChessPiece {
         return count + getCapturesCount(positions, boardSize);
     }
 
+    /**
+     * This method returns all possible captures for Pawn.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
+    @Override
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
         int x = position.getX();
@@ -563,38 +688,104 @@ class Pawn extends ChessPiece {
     }
 }
 
+/**
+ * This class declares position functions to implement.
+ */
 interface BishopMovement {
+    /**
+     * This method returns all possible diagoanl moves.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     int getDiagonalMovesCount(PiecePosition position, PieceColor color, Map<String, ChessPiece> positions,
             int boardSize);
 
+    /**
+     * This method returns all possible diagonal captures.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     int getDiagonalCapturesCount(PiecePosition position, PieceColor color, Map<String, ChessPiece> positions,
             int boardSize);
 }
 
+/**
+ * This class declares position functions to implement.
+ */
 interface RookMovement {
+    /**
+     * This method returns all possible horizontal moves.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     int getOrthogonalMovesCount(PiecePosition position, PieceColor color, Map<String, ChessPiece> positions,
             int boardSize);
 
+    /**
+     * This method returns all possible horizontal captures.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     int getOrthogonalCapturesCount(PiecePosition position, PieceColor color, Map<String, ChessPiece> positions,
             int boardSize);
 }
 
 class Queen extends ChessPiece implements BishopMovement, RookMovement {
+    /**
+     * This constructor creates Queen object.
+     * @param position
+     * @param color
+     */
     Queen(PiecePosition position, PieceColor color) {
         super(position, color);
     }
 
+    /**
+     * This method returns all possible moves for Queen.
+     * all possible horizontal and diagonal moves.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
+    @Override
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize) {
         return getDiagonalMovesCount(position, color, positions, boardSize)
          + getOrthogonalMovesCount(position, color, positions, boardSize)
          + getCapturesCount(positions, boardSize);
     }
 
+    /**
+     * This method returns all possible captures for Queen.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
+    @Override
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize) {
         return getDiagonalCapturesCount(position, color, positions, boardSize)
          + getOrthogonalCapturesCount(position, color, positions, boardSize);
     }
 
+    /**
+     * Implementation of BishopMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     public int getDiagonalMovesCount(PiecePosition position, PieceColor color,
      Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -645,6 +836,15 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         return count;
     }
 
+    /**
+     * Implementation of BishopMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
+    @Override
     public int getDiagonalCapturesCount(PiecePosition position, PieceColor color,
     Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -706,6 +906,15 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         return count;
     }
 
+    /**
+     * Implementation of RookMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
+    @Override
     public int getOrthogonalMovesCount(PiecePosition position, PieceColor color,
     Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -755,6 +964,14 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
         return count;
     }
 
+    /**
+     * Implementation of RookMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     public int getOrthogonalCapturesCount(PiecePosition position, PieceColor color,
     Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -818,19 +1035,46 @@ class Queen extends ChessPiece implements BishopMovement, RookMovement {
 }
 
 class Bishop extends ChessPiece implements BishopMovement {
+    /**
+     * This constructor creates Bishop object.
+     * @param position
+     * @param color
+     */
     Bishop(PiecePosition position, PieceColor color) {
         super(position, color);
     }
 
+    /**
+     * This method returns all possible moves for Bishop.
+     * all possible diagonal moves.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize) {
         return getDiagonalMovesCount(position, color, positions, boardSize)
         + getDiagonalCapturesCount(position, color, positions, boardSize);
     }
 
+    /**
+     * This method returns all possible captures for Bishop.
+     * all possible diagonal captures.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize) {
         return getDiagonalCapturesCount(position, color, positions, boardSize);
     }
 
+    /**
+     * Implementation of BishopMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     public int getDiagonalMovesCount(PiecePosition position, PieceColor color,
      Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -881,6 +1125,14 @@ class Bishop extends ChessPiece implements BishopMovement {
         return count;
     }
 
+    /**
+     * Implementation of BishopMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     public int getDiagonalCapturesCount(PiecePosition position, PieceColor color,
     Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -944,19 +1196,46 @@ class Bishop extends ChessPiece implements BishopMovement {
 }
 
 class Rook extends ChessPiece implements RookMovement {
+    /**
+     * This constructor creates Rook object.
+     * @param position
+     * @param color
+     */
     Rook(PiecePosition position, PieceColor color) {
         super(position, color);
     }
 
+    /**
+     * This method returns all possible moves for Rook.
+     * all possible horizontal and vertical moves.
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     public int getMovesCount(Map<String, ChessPiece> positions, int boardSize) {
         return getOrthogonalMovesCount(position, color, positions, boardSize)
         + getOrthogonalCapturesCount(position, color, positions, boardSize);
     }
 
+    /**
+     * This method returns all possible captures for Rook.
+     * all possible horizontal and vertical captures.
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     public int getCapturesCount(Map<String, ChessPiece> positions, int boardSize) {
         return getOrthogonalCapturesCount(position, color, positions, boardSize);
     }
 
+    /**
+     * Implementation of RookMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible moves
+     */
     public int getOrthogonalMovesCount(PiecePosition position, PieceColor color,
     Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -1006,6 +1285,14 @@ class Rook extends ChessPiece implements RookMovement {
         return count;
     }
 
+    /**
+     * Implementation of RookMovement interface.
+     * @param position
+     * @param color
+     * @param positions
+     * @param boardSize
+     * @return number of possible captures
+     */
     public int getOrthogonalCapturesCount(PiecePosition position, PieceColor color,
     Map<String, ChessPiece> positions, int boardSize) {
         int count = 0;
@@ -1068,41 +1355,55 @@ class Rook extends ChessPiece implements RookMovement {
     }
 }
 
-
 class Board {
     /** Map of all pieces positions. */
-    private Map<String, ChessPiece> piecePosition;
+    private Map<String, ChessPiece> positionToPieces;
     /** Board size. */
     private int size;
 
+    /**
+     * This constructor creates Board object.
+     * @param boardSize
+     */
     Board(int boardSize) {
         this.size = boardSize;
-        piecePosition = new HashMap<>();
+        positionToPieces = new HashMap<>();
     }
 
-    public String returnPiecePositions() {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, ChessPiece> entry : piecePosition.entrySet()) {
-            sb.append(entry.getKey() + " " + entry.getValue().getColor()
-            + " " + entry.getValue().getClass().getSimpleName() + "\n");
-        }
-        return sb.toString();
-    }
 
+    /**
+     * This method adds piece to the board.
+     * @param piece
+     */
     public void addPiece(ChessPiece piece) {
-        piecePosition.put(piece.getPosition().toString(), piece);
+        positionToPieces.put(piece.getPosition().toString(), piece);
     }
 
+    /**
+     * This method returns piece by its position.
+     * @param position
+     * @return piece
+     */
     public ChessPiece getPiece(PiecePosition position) {
-        return this.piecePosition.get(position.toString());
+        return this.positionToPieces.get(position.toString());
     }
 
+    /**
+     * This method returns all movements of certain piece.
+     * @param piece
+     * @return possible moves
+     */
     public int getPiecePossibleMovesCount(ChessPiece piece) {
-        return piece.getMovesCount(piecePosition, size);
+        return piece.getMovesCount(positionToPieces, size);
     }
 
+    /**
+     * This method returns all captures of certain piece.
+     * @param piece
+     * @return possible moves
+     */
     public int getPiecePossibleCapturesCount(ChessPiece piece) {
-        return piece.getCapturesCount(piecePosition, size);
+        return piece.getCapturesCount(positionToPieces, size);
     }
 }
 
