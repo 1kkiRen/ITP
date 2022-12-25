@@ -1,0 +1,5 @@
+3
+3
+King White 1 1
+King Black 2 1
+Queen White 2 3

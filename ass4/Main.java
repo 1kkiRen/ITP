@@ -1,5 +1,3 @@
-package ass4;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
@@ -47,8 +45,8 @@ public final class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        String inputFile = "C://Users//dmitr//Documents//Inno//ass4//input.txt";
-        String outputFile = "C://Users//dmitr//Documents//Inno//ass4//output.txt";
+        String inputFile = "input.txt";
+        String outputFile = "output.txt";
 
         try (FileInputStream in = new FileInputStream(inputFile);
         FileOutputStream out = new FileOutputStream(outputFile);) {
@@ -1404,12 +1402,6 @@ class Board {
      */
     public int getPiecePossibleCapturesCount(ChessPiece piece) {
         return piece.getCapturesCount(positionToPieces, size);
-    }
-}
-
-class Exception {
-    public String getMessage() {
-        return "Exception";
     }
 }
 
