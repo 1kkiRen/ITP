@@ -311,8 +311,6 @@ public class Main {
         List<Animal> animals = new ArrayList<>();
         try {
             String[] animal = new String(buffer).split("\r\n| ");
-            int days = Integer.parseInt(animal[0]);
-            float grassAmount = Float.parseFloat(animal[1]);
             int animalCount = Integer.parseInt(animal[2]);
             for (int i = 3; i < animalCount * 4; i += 4) {
                 if (animal[i].equals("Lion")) {
@@ -333,9 +331,9 @@ public class Main {
         Field field = new Field(grassAmount);
         removeDeadAnimals(animals);
         for (int i = 0; i < days; i++) {
-            for (Animal animal : animals) {
-                animal.eat(animals, field);
-                animal.decrementEnergy();
+            for (int j = 0; j < animals.size(); j++) {
+                animals.get(j).eat(animals, field);
+                animals.get(j).decrementEnergy();
                 removeDeadAnimals(animals);
             }
             field.growGrass();
